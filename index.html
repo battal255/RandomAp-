@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nursena Hanım Köpek Sahiplenme Alanı</title>
+  <title>Nursena Hanım’ın Minik Barınağı</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,33 +11,87 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #ffd6e7, #ffeaf3);
+      font-family: "Trebuchet MS", "Arial", sans-serif;
+      background: linear-gradient(180deg, #ffd6e7, #ffeaf3, #fff5f9);
       color: #4a2a35;
+      overflow-x: hidden;
+    }
+
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .floating-hearts span {
+      position: absolute;
+      bottom: -40px;
+      font-size: 24px;
+      animation: floatUp linear infinite;
+      opacity: 0.7;
+    }
+
+    .floating-hearts span:nth-child(1) { left: 8%; animation-duration: 10s; animation-delay: 0s; }
+    .floating-hearts span:nth-child(2) { left: 18%; animation-duration: 13s; animation-delay: 2s; }
+    .floating-hearts span:nth-child(3) { left: 30%; animation-duration: 11s; animation-delay: 1s; }
+    .floating-hearts span:nth-child(4) { left: 42%; animation-duration: 15s; animation-delay: 4s; }
+    .floating-hearts span:nth-child(5) { left: 58%; animation-duration: 12s; animation-delay: 3s; }
+    .floating-hearts span:nth-child(6) { left: 72%; animation-duration: 14s; animation-delay: 1s; }
+    .floating-hearts span:nth-child(7) { left: 84%; animation-duration: 10s; animation-delay: 5s; }
+    .floating-hearts span:nth-child(8) { left: 92%; animation-duration: 16s; animation-delay: 2s; }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.9);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.2);
+        opacity: 0;
+      }
     }
 
     .page {
       min-height: 100vh;
       display: flex;
+      position: relative;
+      z-index: 1;
     }
 
     .sidebar {
-      width: 290px;
+      width: 310px;
       background: rgba(255, 255, 255, 0.78);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
       border-right: 1px solid #f2b7cc;
       padding: 24px 18px;
+      box-shadow: 4px 0 20px rgba(190, 92, 129, 0.08);
     }
 
     .sidebar h2 {
       margin-top: 0;
       color: #c04b7a;
-      font-size: 24px;
+      font-size: 26px;
     }
 
     .sidebar p {
       color: #7a5a66;
       margin-top: 0;
+    }
+
+    .counter {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #a85a79;
+      font-weight: bold;
+      background: #fff4f8;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #f3c0d4;
     }
 
     .adopted-list {
@@ -50,10 +104,11 @@
       background: #fff2f7;
       margin-bottom: 10px;
       padding: 12px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-weight: bold;
       border: 1px solid #f4bfd3;
       color: #b34271;
+      box-shadow: 0 6px 14px rgba(227, 126, 164, 0.08);
     }
 
     .main {
@@ -66,13 +121,21 @@
 
     .card {
       width: 100%;
-      max-width: 820px;
-      background: rgba(255, 255, 255, 0.88);
-      border-radius: 24px;
-      box-shadow: 0 14px 35px rgba(190, 92, 129, 0.18);
-      padding: 30px;
+      max-width: 860px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      box-shadow: 0 18px 45px rgba(190, 92, 129, 0.18);
+      padding: 32px;
       text-align: center;
       border: 1px solid #f4bfd3;
+    }
+
+    .top-title {
+      font-size: 16px;
+      color: #d05a89;
+      font-weight: bold;
+      margin-bottom: 12px;
+      letter-spacing: 0.4px;
     }
 
     .doctor-badge {
@@ -91,25 +154,28 @@
 
     h1 {
       margin-top: 0;
-      font-size: 32px;
+      font-size: 34px;
       line-height: 1.3;
       color: #b53f70;
+      margin-bottom: 10px;
     }
 
     .subtitle {
       color: #7a5a66;
       margin-bottom: 20px;
       font-size: 17px;
+      line-height: 1.6;
     }
 
     img {
       width: 100%;
       max-height: 430px;
       object-fit: contain;
-      border-radius: 18px;
+      border-radius: 20px;
       background: #fff7fa;
       border: 1px solid #f6cadb;
       margin-bottom: 18px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
     }
 
     .status {
@@ -117,6 +183,10 @@
       margin-bottom: 18px;
       font-weight: bold;
       color: #8f4563;
+      background: #fff5f8;
+      border: 1px solid #f4cada;
+      border-radius: 12px;
+      padding: 12px;
     }
 
     .buttons {
@@ -132,13 +202,14 @@
       padding: 14px 18px;
       font-size: 16px;
       cursor: pointer;
-      min-width: 180px;
-      transition: transform 0.15s ease, opacity 0.15s ease;
+      min-width: 185px;
+      transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
       font-weight: bold;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
     }
 
     button:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
 
     button:disabled {
@@ -230,13 +301,6 @@
       max-width: 220px;
     }
 
-    .counter {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #a85a79;
-      font-weight: bold;
-    }
-
     @media (max-width: 900px) {
       .page {
         flex-direction: column;
@@ -283,9 +347,20 @@
   </style>
 </head>
 <body>
+  <div class="floating-hearts">
+    <span>💗</span>
+    <span>💕</span>
+    <span>💖</span>
+    <span>💘</span>
+    <span>💗</span>
+    <span>💕</span>
+    <span>💖</span>
+    <span>💘</span>
+  </div>
+
   <div class="page">
     <aside class="sidebar">
-      <h2>💗 Sahiplenilen Köpekler</h2>
+      <h2>💗 Minik Barınak</h2>
       <p>Nursena Hanım en fazla 3 köpek sahiplenebilir.</p>
       <div class="counter" id="counter">0 / 3 sahiplenildi</div>
       <ul id="adoptedList" class="adopted-list">
@@ -297,11 +372,14 @@
 
     <main class="main">
       <div class="card">
+        <div class="top-title">🐾 Nursena Hanım’ın Minik Barınağı 🐾</div>
         <div class="doctor-badge">🩺 Geleceğin Doktoru Nursena Hanım</div>
 
-        <h1>Merhaba Nursena Hanım,<br>Köpek Sahiplenme Alanına Hoşgeldiniz</h1>
+        <h1>Merhaba Nursena Hanım 💖<br>Köpek Sahiplenme Alanına Hoşgeldiniz</h1>
+
         <div class="subtitle">
-          Sizin için sevimli köpekler geliyor. Beğendiğinizi sahiplenebilirsiniz.
+          Sizin için sevgi dolu, tatlı ve rastgele köpekler geliyor.  
+          Beğendiğiniz minik dostu sahiplenebilir, adını koyabilir ve kendi küçük barınağınızı oluşturabilirsiniz.
         </div>
 
         <img id="dogImage" alt="Rastgele köpek fotoğrafı" />
