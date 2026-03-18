@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Köpek</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      text-align: center;
+      width: min(90vw, 700px);
+    }
+    h1 { margin-top: 0; }
+    button {
+      border: none;
+      padding: 12px 18px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 18px;
+    }
+    img {
+      max-width: 100%;
+      max-height: 500px;
+      border-radius: 12px;
+      object-fit: contain;
+      display: none;
+    }
+    .status {
+      margin: 12px 0 16px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🐶 Random Köpek Fotoğrafı</h1>
+    <button id="newDogBtn">Yeni köpek getir</button>
+    <div class="status" id="status">Yükleniyor...</div>
+    <img id="dogImage" alt="Random köpek fotoğrafı" />
+  </div>
+
+  <script>
+    const btn = document.getElementById("newDogBtn");
+    const img = document.getElementById("dogImage");
+    const status = document.getElementById("status");
+
+    async function loadDog() {
+      try {
+        status.textContent = "Yeni köpek geliyor...";
+        btn.disabled = true;
+
+        const res = await fetch("https://dog.ceo/api/breeds/image/random");
+        if (!res.ok) throw new Error("API hatası");
+
+        const data = await res.json();
+        img.src = data.message;
+        img.style.display = "block";
+        status.textContent = "İşte yeni köpek!";
+      } catch (err) {
+        status.textContent = "Fotoğraf alınamadı.";
+        img.style.display = "none";
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    btn.addEventListener("click", loadDog);
+    loadDog();
+  </script>
+</body>
+</html>
