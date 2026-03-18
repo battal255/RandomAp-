@@ -3,80 +3,306 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Random Köpek</title>
+  <title>Köpek Sahiplenme Alanı</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    .page {
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #f5f5f5;
+      display: flex;
     }
-    .card {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      text-align: center;
-      width: min(90vw, 700px);
+
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid #ddd;
+      padding: 24px 18px;
     }
-    h1 { margin-top: 0; }
-    button {
-      border: none;
-      padding: 12px 18px;
-      font-size: 16px;
+
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .sidebar p {
+      color: #666;
+      margin-top: 0;
+    }
+
+    .adopted-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+    }
+
+    .adopted-list li {
+      background: #eef3ff;
+      margin-bottom: 10px;
+      padding: 12px;
       border-radius: 10px;
-      cursor: pointer;
+      font-weight: bold;
+      border: 1px solid #d8e2ff;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 32px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 760px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      padding: 28px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 30px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    img {
+      width: 100%;
+      max-height: 430px;
+      object-fit: contain;
+      border-radius: 16px;
+      background: #f7f7f7;
+      border: 1px solid #eee;
       margin-bottom: 18px;
     }
-    img {
-      max-width: 100%;
-      max-height: 500px;
-      border-radius: 12px;
-      object-fit: contain;
-      display: none;
-    }
+
     .status {
-      margin: 12px 0 16px;
-      color: #444;
+      min-height: 28px;
+      margin-bottom: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      min-width: 180px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .adopt-btn {
+      background: #4caf50;
+      color: white;
+    }
+
+    .trash-btn {
+      background: #e53935;
+      color: white;
+    }
+
+    .next-btn {
+      background: #1e88e5;
+      color: white;
+    }
+
+    .note {
+      margin-top: 20px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .main {
+        padding: 18px;
+      }
+
+      button {
+        min-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🐶 Random Köpek Fotoğrafı</h1>
-    <button id="newDogBtn">Yeni köpek getir</button>
-    <div class="status" id="status">Yükleniyor...</div>
-    <img id="dogImage" alt="Random köpek fotoğrafı" />
+  <div class="page">
+    <aside class="sidebar">
+      <h2>Sahiplenilen Köpekler</h2>
+      <p>En fazla 3 köpek sahiplenebilirsiniz.</p>
+      <ul id="adoptedList" class="adopted-list">
+        <li style="background:#fafafa;color:#777;font-weight:normal;border:1px dashed #ccc;">
+          Henüz sahiplenilen köpek yok.
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="card">
+        <h1>Merhaba Nursena Hanım,<br>Köpek Sahiplenme Alanına Hoşgeldiniz</h1>
+        <div class="subtitle">Aşağıda rastgele köpek fotoğrafları göreceksiniz.</div>
+
+        <img id="dogImage" alt="Rastgele köpek fotoğrafı" />
+        <div id="status" class="status">İlk köpek yükleniyor...</div>
+
+        <div class="buttons">
+          <button id="adoptBtn" class="adopt-btn">Sahiplen</button>
+          <button id="trashBtn" class="trash-btn">Çöpe At</button>
+          <button id="nextBtn" class="next-btn">Sonraki Köpeğe Geç</button>
+        </div>
+
+        <div class="note">Sahiplendikten sonra otomatik olarak bir sonraki köpek gelir.</div>
+      </div>
+    </main>
   </div>
 
   <script>
-    const btn = document.getElementById("newDogBtn");
-    const img = document.getElementById("dogImage");
-    const status = document.getElementById("status");
+    const dogImage = document.getElementById("dogImage");
+    const statusText = document.getElementById("status");
+    const adoptBtn = document.getElementById("adoptBtn");
+    const trashBtn = document.getElementById("trashBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const adoptedList = document.getElementById("adoptedList");
+
+    let adoptedDogs = [];
+    let currentDogImage = "";
+
+    function renderAdoptedDogs() {
+      adoptedList.innerHTML = "";
+
+      if (adoptedDogs.length === 0) {
+        adoptedList.innerHTML = `
+          <li style="background:#fafafa;color:#777;font-weight:normal;border:1px dashed #ccc;">
+            Henüz sahiplenilen köpek yok.
+          </li>
+        `;
+        return;
+      }
+
+      adoptedDogs.forEach((dogName, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${dogName}`;
+        adoptedList.appendChild(li);
+      });
+    }
 
     async function loadDog() {
       try {
-        status.textContent = "Yeni köpek geliyor...";
-        btn.disabled = true;
+        statusText.textContent = "Yeni köpek yükleniyor...";
+        adoptBtn.disabled = true;
+        nextBtn.disabled = true;
 
-        const res = await fetch("https://dog.ceo/api/breeds/image/random");
-        if (!res.ok) throw new Error("API hatası");
+        const response = await fetch("https://dog.ceo/api/breeds/image/random");
+        if (!response.ok) {
+          throw new Error("API hatası oluştu.");
+        }
 
-        const data = await res.json();
-        img.src = data.message;
-        img.style.display = "block";
-        status.textContent = "İşte yeni köpek!";
-      } catch (err) {
-        status.textContent = "Fotoğraf alınamadı.";
-        img.style.display = "none";
+        const data = await response.json();
+        currentDogImage = data.message;
+        dogImage.src = currentDogImage;
+        statusText.textContent = "Bu köpeği sahiplenebilir veya sonraki köpeğe geçebilirsiniz.";
+      } catch (error) {
+        statusText.textContent = "Köpek fotoğrafı alınamadı.";
       } finally {
-        btn.disabled = false;
+        adoptBtn.disabled = false;
+        nextBtn.disabled = false;
       }
     }
 
-    btn.addEventListener("click", loadDog);
+    async function adoptDog() {
+      if (adoptedDogs.length >= 3) {
+        statusText.textContent = "Maalesef durumunuz bu kadar köpek sahiplenmek için yeterli değil.";
+        return;
+      }
+
+      const dogName = prompt("Sahiplendiğiniz köpeğin adını koyun:");
+      if (!dogName) {
+        statusText.textContent = "İsim girilmedi. Sahiplendirme iptal edildi.";
+        return;
+      }
+
+      adoptedDogs.push(dogName.trim());
+      renderAdoptedDogs();
+      statusText.textContent = `"${dogName.trim()}" başarıyla sahiplendi! Yeni köpek geliyor...`;
+      await loadDog();
+    }
+
+    function trashDog() {
+      alert("Köpekler çöpe atılmaz!");
+      try {
+        window.close();
+        setTimeout(() => {
+          document.body.innerHTML = `
+            <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;
+                        font-family:Arial,sans-serif;background:#f4f6f8;padding:24px;text-align:center;">
+              <div style="background:#fff;padding:32px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.08);max-width:520px;">
+                <h1 style="margin-top:0;">Köpekler çöpe atılmaz!</h1>
+                <p>Bu sekme tarayıcı tarafından otomatik kapatılamadı. Lütfen sekmeyi siz kapatın.</p>
+              </div>
+            </div>
+          `;
+        }, 300);
+      } catch (e) {
+        document.body.innerHTML = `
+          <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;
+                      font-family:Arial,sans-serif;background:#f4f6f8;padding:24px;text-align:center;">
+            <div style="background:#fff;padding:32px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.08);max-width:520px;">
+              <h1 style="margin-top:0;">Köpekler çöpe atılmaz!</h1>
+              <p>Bu sekme tarayıcı tarafından otomatik kapatılamadı. Lütfen sekmeyi siz kapatın.</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    adoptBtn.addEventListener("click", adoptDog);
+    trashBtn.addEventListener("click", trashDog);
+    nextBtn.addEventListener("click", loadDog);
+
+    renderAdoptedDogs();
     loadDog();
   </script>
 </body>
